@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakovat - Asosiy Sahifa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-light: #f8fafc;
+            --bg-light: #f1f5f9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: #333; }
+        
+        /* Navigatsiya */
+        header { background-color: var(--primary); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .logo { color: var(--accent); font-size: 1.5rem; font-weight: 800; text-decoration: none; letter-spacing: 1px;}
+        nav a { color: var(--text-light); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
+        nav a:hover { color: var(--secondary); }
+        nav a.active { color: var(--accent); }
+
+        /* Asosiy qism (Hero) */
+        .hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: white; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; color: var(--accent); }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin-bottom: 2rem; line-height: 1.6; opacity: 0.9; }
+        
+        .btn-start { background-color: var(--secondary); color: white; padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: 600; border-radius: 8px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+        .btn-start:hover { background-color: #2563eb; transform: translateY(-2px); }
+
+        /* Footer */
+        footer { text-align: center; padding: 1.5rem; background-color: var(--primary); color: white; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">ZAKOVAT INTELLEKT</a>
+        <nav>
+            <a href="index.html" class="active">Bosh sahifa</a>
+            <a href="about.html">Loyiha haqida</a>
+            <a href="scoreboard.html">Natijalar (Hisoblash)</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <h1>Intellektual O'yinga Xush Kelibsiz!</h1>
+        <p>Zakovat o'yinlari uchun maxsus ishlab chiqilgan professional platforma. O'z jamoangiz bilan bilimingizni sinab ko'ring va natijalarni real vaqtda kuzatib boring.</p>
+        <a href="scoreboard.html" class="btn-start">O'yinni Boshlash</a>
+    </main>
+
+    <footer>]
+    </footer>
+
+</body>
+</html>

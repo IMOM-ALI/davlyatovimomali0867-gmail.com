@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakovat - Natijalar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #3b82f6;
+            --accent: #f59e0b;
+            --text-light: #f8fafc;
+            --bg-light: #f1f5f9;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        header { background-color: var(--primary); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .logo { color: var(--accent); font-size: 1.5rem; font-weight: 800; text-decoration: none; letter-spacing: 1px;}
+        nav a { color: var(--text-light); text-decoration: none; margin-left: 2rem; font-weight: 600; transition: color 0.3s; }
+        nav a:hover { color: var(--secondary); }
+        nav a.active { color: var(--accent); }
+
+        .container { max-width: 1200px; margin: 3rem auto; padding: 0 2rem; flex-grow: 1; width: 100%; }
+        
+        .board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .board-header h2 { color: var(--primary); font-size: 2rem; }
+        .btn-reset { background-color: var(--danger); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-reset:hover { background-color: #dc2626; }
+
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        
+        .player-card { background: var(--card-bg); padding: 2rem; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid var(--secondary); transition: transform 0.3s; }
+        .player-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        
+        .name-input { width: 100%; padding: 0.75rem; margin-bottom: 1.5rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1.2rem; font-weight: 600; text-align: center; outline: none; transition: 0.3s; color: var(--primary); background: transparent; }
+        .name-input:focus { border-color: var(--secondary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
+        
+        .score-display { font-size: 4rem; font-weight: 800; color: var(--primary); margin-bottom: 1.5rem; }
+        
+        .controls { display: flex; justify-content: center; gap: 1rem; }
+        .btn { border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; font-weight: bold; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .btn-minus { background-color: var(--danger); }
+        .btn-minus:hover { background-color: #dc2626; transform: scale(1.05); }
+        .btn-plus { background-color: var(--success); }
+        .btn-plus:hover { background-color: #059669; transform: scale(1.05); }
+
+        footer { text-align: center; padding: 1.5rem; background-color: var(--primary); color: white; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">ZAKOVAT INTELLEKT</a>
+        <nav>
+            <a href="index.html">Bosh sahifa</a>
+            <a href="about.html">Loyiha haqida</a>
+            <a href="scoreboard.html" class="active">Natijalar (Hisoblash)</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="board-header">
+            <h2>O'yin Boshqaruvi</h2>
+            <button class="btn-reset" onclick="resetGame()">O'yinni Yangilash</button>
+        </div>
+        
+        <div class="players-grid" id="playersContainer">
+            <!-- JavaScript yordamida o'yinchilar shu yerga joylanadi -->
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Zakovat Loyihasi. Barcha huquqlar himoyalangan.
+    </footer>
+
+    <script>
+        // Senior darajadagi LocalStorage va JavaScript logikasi
+        const defaultPlayers = [
+            { id: 1, name: 'Ishtirokchi 1', score: 0 },
+            { id: 2, name: 'Ishtirokchi 2', score: 0 },
+            { id: 3, name: 'Ishtirokchi 3', score: 0 },
+            { id: 4, name: 'Ishtirokchi 4', score: 0 }
+        ];
+
+        // Xotiradan o'yinchilarni olamiz yoki defaultni o'rnatamiz
+        let players = JSON.parse(localStorage.getItem('zakovatPlayers')) || defaultPlayers;
+
+        const container = document.getElementById('playersContainer');
+
+        function saveData() {
+            localStorage.setItem('zakovatPlayers', JSON.stringify(players));
+        }
+
+        function renderPlayers() {
+            container.innerHTML = ''; // Ekranni tozalash
+            
+            players.forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.innerHTML = `
+                    <input type="text" class="name-input" value="${player.name}" oninput="updateName(${index}, this.value)" placeholder="Ismni kiriting">
+                    <div class="score-display">${player.score}</div>
+                    <div class="controls">
+                        <button class="btn btn-minus" onclick="updateScore(${index}, -1)">-</button>
+                        <button class="btn btn-plus" onclick="updateScore(${index}, 1)">+</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Ism o'zgarganda xotiraga saqlash
+        function updateName(index, newName) {
+            players[index].name = newName;
+            saveData();
+        }
+
+        // Ballarni hisoblash
+        function updateScore(index, change) {
+            players[index].score += change;
+            saveData();
+            renderPlayers(); // UI ni yangilash
+        }
+
+        // Yangi o'yin boshlash (Barcha ballarni nollash)
+        function resetGame() {
+            if(confirm("Haqiqatan ham barcha natijalarni o'chirmoqchimisiz?")) {
+                players = players.map(p => ({ ...p, score: 0 })); // ismlar qoladi, ballar nollanadi
+                saveData();
+                renderPlayers();
+            }
+        }
+
+        // Birinchi marta yuklanganda ekranga chiqarish
+        renderPlayers();
+    </script>
+</body>
+</html>
